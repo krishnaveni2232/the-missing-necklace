@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Missing Necklace</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- START SCREEN -->
+<div id="startScreen">
+
+    <h1>🕵️ THE MISSING NECKLACE</h1>
+
+    <p>A mysterious case awaits...</p>
+
+    <p>Find the clues and identify the thief!</p>
+
+    <button onclick="startGame()">
+        🔎 START INVESTIGATION
+    </button>
+
+</div>
+
+
+<!-- GAME SCREEN -->
+<div class="game" id="gameScreen">
+
+    <h1>🕵️ THE MISSING NECKLACE</h1>
+
+    <p class="story">
+        A precious necklace has disappeared from the mansion.
+        Find all the clues and solve the case!
+    </p>
+
+    <div class="status">
+
+    🔎 Clues Found:
+    <span id="clueCount">0 / 3</span>
+
+    &nbsp;&nbsp; | &nbsp;&nbsp;
+
+    ⭐ Score:
+    <span id="score">0</span>
+
+    &nbsp;&nbsp; | &nbsp;&nbsp;
+
+    ⏱️ Time:
+    <span id="timer">60</span>
+</div>
+<button onclick="pauseGame()" class="pause">
+    ⏸️ Pause
+</button>
+
+    <h2>🏠 Mansion Room</h2>
+
+    <div class="room">
+
+        <button onclick="findClue(1)" class="object table">
+            🪑
+            <span>Table</span>
+        </button>
+
+        <button onclick="findClue(2)" class="object window">
+            🪟
+            <span>Window</span>
+        </button>
+
+        <button onclick="findClue(3)" class="object bag">
+            👜
+            <span>Bag</span>
+        </button>
+
+    </div>
+
+    <div id="clueBox">
+        🔍 Click the objects in the room to investigate.
+    </div>
+
+    <div id="suspects">
+
+        <h2>👥 Identify the Thief</h2>
+
+        <button onclick="checkAnswer('Anna')" class="suspect">
+            👩 Anna
+        </button>
+
+        <button onclick="checkAnswer('David')" class="suspect">
+            👨 David
+        </button>
+
+        <button onclick="checkAnswer('Lisa')" class="suspect">
+            👩 Lisa
+        </button>
+
+    </div>
+
+    <div id="result"></div>
+
+    <button onclick="restartGame()" class="restart">
+        🔄 Restart Case
+    </button>
+
+</div>
+
+<script src="script.js"></script>
+<div id="pauseScreen">
+
+    <h1>⏸️ GAME PAUSED</h1>
+
+    <p>Take your time, Detective!</p>
+
+    <button onclick="resumeGame()">
+        ▶️ Resume Investigation
+    </button>
+
+</div>
+
+</body>
+</html>

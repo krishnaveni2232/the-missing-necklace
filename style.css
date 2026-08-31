@@ -1,0 +1,170 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111827;
+    color: white;
+    text-align: center;
+}
+
+#startScreen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#startScreen h1 {
+    font-size: 42px;
+}
+
+#startScreen p {
+    font-size: 20px;
+}
+
+#startScreen button {
+    margin-top: 25px;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.game {
+    max-width: 900px;
+    margin: auto;
+    padding: 25px;
+    display: none;
+}
+
+h1 {
+    font-size: 38px;
+}
+
+.story {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.status {
+    margin: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.room {
+    position: relative;
+    height: 400px;
+    background: #d6d3d1;
+    border: 5px solid #78716c;
+    border-radius: 15px;
+    margin: 20px auto;
+}
+
+.object {
+    position: absolute;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.object span {
+    display: block;
+    font-size: 16px;
+}
+
+.object:hover {
+    transform: scale(1.1);
+}
+
+.table {
+    left: 100px;
+    bottom: 70px;
+}
+
+.window {
+    right: 100px;
+    top: 60px;
+}
+
+.bag {
+    left: 400px;
+    bottom: 40px;
+}
+
+#clueBox {
+    background: #1f2937;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px auto;
+    font-size: 18px;
+}
+
+#suspects {
+    display: none;
+    margin-top: 30px;
+}
+
+.suspect {
+    padding: 15px 30px;
+    margin: 8px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#result {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 25px;
+}
+
+.restart {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    cursor: pointer;
+}
+.pause {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#pauseScreen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #111827;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+}
+
+#pauseScreen h1 {
+    font-size: 40px;
+}
+
+#pauseScreen p {
+    font-size: 20px;
+}
+
+#pauseScreen button {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
