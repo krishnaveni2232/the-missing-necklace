@@ -1,161 +1,332 @@
-let cluesFound = [];
-let score = 0;
-let timeLeft = 60;
-let timerInterval;
+// ================================
+// THE MISSING NECKLACE
+// GAME STATE & PROGRESSION
+// ================================
 
-let clues = {
-    1: "🔵 A piece of blue cloth was found on the table.",
-    2: "👣 Muddy footprints were found near the window.",
-    3: "📝 A note says Lisa was seen near the window."
+// Game states
+const GAME_STATES = {
+    START: "start",
+    PLAYING: "playing",
+    PAUSED: "paused",
+    WIN: "win",
+    LOSE: "lose"
 };
+
+let gameState = GAME_STATES.START;
+
+let score = 0;
+let cluesFound = 0;
+let timeLeft = 60;
+let timer = null;
+
+// High score saved in browser
+let highScore = Number(localStorage.getItem("necklaceHighScore")) || 0;
+
+// Correct thief
+const correctThief = "David";
+
+// Clues
+const clues = {
+    1: "🔎 You found a broken button near the table!",
+    2: "🔎 You found muddy footprints near the window!",
+    3: "🔎 You found a note inside the bag mentioning David!"
+};
+
+
+// ================================
+// START GAME
+// ================================
 
 function startGame() {
 
+    gameState = GAME_STATES.PLAYING;
+
+    score = 0;
+    cluesFound = 0;
+    timeLeft = 60;
+
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("gameScreen").style.display = "block";
+    document.getElementById("pauseScreen").style.display = "none";
+
+    document.getElementById("result").innerHTML = "";
+
+    updateDisplay();
 
     startTimer();
 }
 
+
+// ================================
+// TIMER
+// ================================
+
 function startTimer() {
 
-    clearInterval(timerInterval);
+    clearInterval(timer);
 
-    timeLeft = 60;
+    timer = setInterval(function () {
 
-    document.getElementById("timer").innerHTML = timeLeft;
-
-    timerInterval = setInterval(function() {
+        if (gameState !== GAME_STATES.PLAYING) {
+            return;
+        }
 
         timeLeft--;
 
-        document.getElementById("timer").innerHTML = timeLeft;
+        updateDisplay();
 
         if (timeLeft <= 0) {
-
-            clearInterval(timerInterval);
-
-            document.getElementById("result").innerHTML =
-                "⏰ TIME'S UP!<br>❌ CASE FAILED!";
-
-            document.getElementById("suspects").style.display = "none";
+            timeLeft = 0;
+            loseGame();
         }
 
     }, 1000);
 }
 
-function findClue(number) {
 
-    if (cluesFound.includes(number)) {
+// ================================
+// FIND CLUE
+// ================================
 
-        document.getElementById("clueBox").innerHTML =
-            "🔍 You already investigated this object.";
+function findClue(clueNumber) {
+
+    if (gameState !== GAME_STATES.PLAYING) {
+        return;
+    }
+
+    const button = document.querySelector(
+        `.object:nth-child(${clueNumber})`
+    );
+
+    // Prevent collecting the same clue twice
+    if (button && button.disabled) {
+        return;
+    }
+
+    if (button) {
+        button.disabled = true;
+        button.style.opacity = "0.5";
+    }
+
+    cluesFound++;
+
+    // Score increases for every new clue
+    score += 100;
+
+    document.getElementById("clueBox").innerHTML =
+        clues[clueNumber];
+
+    updateDisplay();
+
+    // All clues found
+    if (cluesFound === 3) {
+
+        document.getElementById("clueBox").innerHTML +=
+            "<br><br>💡 You found all the clues! Now identify the thief.";
+
+        // Bonus for finding all clues
+        score += 200;
+
+        updateDisplay();
+    }
+}
+
+
+// ================================
+// CHECK SUSPECT
+// ================================
+
+function checkAnswer(suspect) {
+
+    if (gameState !== GAME_STATES.PLAYING) {
+        return;
+    }
+
+    // Player must find all clues first
+    if (cluesFound < 3) {
+
+        document.getElementById("result").innerHTML =
+            "🔍 Find all 3 clues before identifying the thief!";
 
         return;
     }
 
-    cluesFound.push(number);
+    if (suspect === correctThief) {
 
-    score += 10;
+        score += 500;
 
-    document.getElementById("score").innerHTML = score;
-
-    document.getElementById("clueBox").innerHTML =
-        clues[number];
-
-    document.getElementById("clueCount").innerHTML =
-        cluesFound.length + " / 3";
-
-    if (cluesFound.length === 3) {
-
-        document.getElementById("clueBox").innerHTML =
-            "🔎 All clues discovered! Identify the thief.";
-
-        document.getElementById("suspects").style.display =
-            "block";
-    }
-}
-
-function checkAnswer(name) {
-
-    clearInterval(timerInterval);
-
-    let result = document.getElementById("result");
-
-    if (name === "Lisa") {
-
-        score += 50;
-
-        document.getElementById("score").innerHTML = score;
-
-        result.innerHTML =
-            "🎉 CASE SOLVED!<br>" +
-            "Lisa was the thief!<br>" +
-            "⭐ Final Score: " + score;
+        winGame();
 
     } else {
 
-        result.innerHTML =
-            "❌ WRONG SUSPECT!<br>" +
-            "Try again!";
+        loseGame();
     }
 }
 
+
+// ================================
+// WIN
+// ================================
+
+function winGame() {
+
+    gameState = GAME_STATES.WIN;
+
+    clearInterval(timer);
+
+    saveHighScore();
+
+    document.getElementById("result").innerHTML =
+        `
+        <h2>🎉 CASE SOLVED!</h2>
+        <p>David was the thief!</p>
+        <p>⭐ Final Score: ${score}</p>
+        <p>🏆 High Score: ${highScore}</p>
+        `;
+
+    disableGameButtons();
+}
+
+
+// ================================
+// LOSE
+// ================================
+
+function loseGame() {
+
+    gameState = GAME_STATES.LOSE;
+
+    clearInterval(timer);
+
+    document.getElementById("result").innerHTML =
+        `
+        <h2>😔 CASE FAILED!</h2>
+        <p>The investigation is over.</p>
+        <p>⭐ Score: ${score}</p>
+        <button onclick="restartGame()">🔄 Try Again</button>
+        `;
+
+    disableGameButtons();
+}
+
+
+// ================================
+// PAUSE
+// ================================
+
+function pauseGame() {
+
+    if (gameState !== GAME_STATES.PLAYING) {
+        return;
+    }
+
+    gameState = GAME_STATES.PAUSED;
+
+    document.getElementById("pauseScreen").style.display = "flex";
+}
+
+
+// ================================
+// RESUME
+// ================================
+
+function resumeGame() {
+
+    if (gameState !== GAME_STATES.PAUSED) {
+        return;
+    }
+
+    gameState = GAME_STATES.PLAYING;
+
+    document.getElementById("pauseScreen").style.display = "none";
+}
+
+
+// ================================
+// RESTART
+// ================================
+
 function restartGame() {
 
-    clearInterval(timerInterval);
+    clearInterval(timer);
 
-    cluesFound = [];
+    gameState = GAME_STATES.START;
+
     score = 0;
+    cluesFound = 0;
     timeLeft = 60;
 
-    document.getElementById("startScreen").style.display = "flex";
-
     document.getElementById("gameScreen").style.display = "none";
-
-    document.getElementById("clueCount").innerHTML = "0 / 3";
-
-    document.getElementById("score").innerHTML = "0";
-
-    document.getElementById("timer").innerHTML = "60";
+    document.getElementById("pauseScreen").style.display = "none";
+    document.getElementById("startScreen").style.display = "flex";
 
     document.getElementById("clueBox").innerHTML =
         "🔍 Click the objects in the room to investigate.";
 
-    document.getElementById("suspects").style.display = "none";
-
     document.getElementById("result").innerHTML = "";
+
+    // Enable clues again
+    const objects = document.querySelectorAll(".object");
+
+    objects.forEach(function(button) {
+        button.disabled = false;
+        button.style.opacity = "1";
+    });
+
+    updateDisplay();
 }
-function pauseGame() {
 
-    clearInterval(timerInterval);
 
-    document.getElementById("pauseScreen").style.display =
-        "flex";
+// ================================
+// DISPLAY
+// ================================
+
+function updateDisplay() {
+
+    document.getElementById("clueCount").innerText =
+        `${cluesFound} / 3`;
+
+    document.getElementById("score").innerText =
+        score;
+
+    document.getElementById("timer").innerText =
+        timeLeft;
 }
 
-function resumeGame() {
 
-    document.getElementById("pauseScreen").style.display =
-        "none";
+// ================================
+// HIGH SCORE
+// ================================
 
-    timerInterval = setInterval(function() {
+function saveHighScore() {
 
-        timeLeft--;
+    if (score > highScore) {
 
-        document.getElementById("timer").innerHTML =
-            timeLeft;
+        highScore = score;
 
-        if (timeLeft <= 0) {
+        localStorage.setItem(
+            "necklaceHighScore",
+            highScore
+        );
+    }
+}
 
-            clearInterval(timerInterval);
 
-            document.getElementById("result").innerHTML =
-                "⏰ TIME'S UP!<br>❌ CASE FAILED!";
+// ================================
+// DISABLE GAME BUTTONS
+// ================================
 
-            document.getElementById("suspects").style.display =
-                "none";
-        }
+function disableGameButtons() {
 
-    }, 1000);
+    const objects = document.querySelectorAll(".object");
+
+    objects.forEach(function(button) {
+        button.disabled = true;
+    });
+
+    const suspects = document.querySelectorAll(".suspect");
+
+    suspects.forEach(function(button) {
+        button.disabled = true;
+    });
 }
