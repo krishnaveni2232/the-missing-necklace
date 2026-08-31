@@ -13,7 +13,6 @@
     <h1>🕵️ THE MISSING NECKLACE</h1>
 
     <p>A mysterious case awaits...</p>
-
     <p>Find the clues and identify the thief!</p>
 
     <button onclick="startGame()">
@@ -35,22 +34,25 @@
 
     <div class="status">
 
-    🔎 Clues Found:
-    <span id="clueCount">0 / 3</span>
+        🔎 Clues Found:
+        <span id="clueCount">0 / 3</span>
 
-    &nbsp;&nbsp; | &nbsp;&nbsp;
+        &nbsp;&nbsp; | &nbsp;&nbsp;
 
-    ⭐ Score:
-    <span id="score">0</span>
+        ⭐ Score:
+        <span id="score">0</span>
 
-    &nbsp;&nbsp; | &nbsp;&nbsp;
+        &nbsp;&nbsp; | &nbsp;&nbsp;
 
-    ⏱️ Time:
-    <span id="timer">60</span>
-</div>
-<button onclick="pauseGame()" class="pause">
-    ⏸️ Pause
-</button>
+        ⏱️ Time:
+        <span id="timer">60</span>
+
+    </div>
+
+    <button onclick="pauseGame()" class="pause">
+        ⏸️ Pause
+    </button>
+
 
     <h2>🏠 Mansion Room</h2>
 
@@ -73,10 +75,13 @@
 
     </div>
 
+
     <div id="clueBox">
         🔍 Click the objects in the room to investigate.
     </div>
 
+
+    <!-- SUSPECT SECTION -->
     <div id="suspects">
 
         <h2>👥 Identify the Thief</h2>
@@ -95,24 +100,9 @@
 
     </div>
 
+
     <div id="result"></div>
-    <div id="suspects">
 
-    <h2>👥 Identify the Thief</h2>
-
-    <button onclick="checkAnswer('Anna')" class="suspect">
-        👩 Anna
-    </button>
-
-    <button onclick="checkAnswer('David')" class="suspect">
-        👨 David
-    </button>
-
-    <button onclick="checkAnswer('Lisa')" class="suspect">
-        👩 Lisa
-    </button>
-
-</div>
 
     <button onclick="restartGame()" class="restart">
         🔄 Restart Case
@@ -120,7 +110,8 @@
 
 </div>
 
-<script src="script.js"></script>
+
+<!-- PAUSE SCREEN -->
 <div id="pauseScreen">
 
     <h1>⏸️ GAME PAUSED</h1>
@@ -132,6 +123,9 @@
     </button>
 
 </div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
